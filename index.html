@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title>Demander ses données</title>
+	<!-- CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<style>
+		.result{
+			display: none;
+		}
+	</style>
+
+	<link href='https://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,800" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"/>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="offset-md-2 col-md-8 col-sm-12">
+				<h1 class="intro">Demander ses données</h1>
+				<p class="lead">Générateur de demandes de données personnelles</p>
+				<p>
+					Ce formulaire aide à envoyer des demandes d’accès aux données personnelles.
+					Il s’appuie sur <a href="https://wiki.personaldata.io/wiki/Main_Page">wiki.personaldata.io</a>, un site contributif visant à aider les utilisateurs dans leurs requêtes auprès des entreprises.
+				</p>
+				<p>
+					Certaines entreprises vous demanderont de prouver votre identité (contact téléphonique, courrier recommandé, copie du passeport etc.)
+				</p>
+
+				<div class="form-group">
+			     <label for="companySelect">Choisissez une entreprise:</label>
+					 <select id="companySelect" class="form-control">
+						 <option value="choose">Choisir…</option>
+					 </select>
+			 </div>
+
+				<div class="result">
+
+					<div class="form-group">
+					  <label for="object">Objet:</label>
+					  <input type="text" class="form-control" id="object">
+					</div>
+					
+					<div class="form-group">
+					  <label for="message">Message:</label>
+					  <textarea class="form-control" rows="10" id="message"></textarea>
+					</div>
+					
+					<a class="btn btn-primary" href="mailto:" id="sendMail">Ouvrir dans le client e-mail</a>
+					
+				</div>
+			</div>
+	</div>
+	</div>
+	<script src="js/jquery.min.js"></script>
+	<script>
+	
+	// Will contain each company item
+	var companies = [];
+	
+	// Get Companies & properties json
+	$.ajax({
+			url: 'data/exports.json?2',
+			success: function(data){
+				$.each(data['data'], function(i, item){
+					companies.push(item);
+					$('#companySelect').append('<option value="' + item['key'] + '">' + item['Recipient'] + '</option>')
+				});
+			},
+			error: function(d){
+				console.log('Error - json syntax error?')
+			}
+		});
+	
+	// On select change: show SAR text & send button
+	$('#companySelect').change(function(){
+		$('.result').hide(100);
+		var key = $(this).val();
+		if(key == 'choose'){
+			return;
+		}
+		var found;
+		$.each(companies, function(i, item){
+			if(item['key'] == key){
+				found = item;
+				return;
+			}
+		});
+		if(found){
+			$('#object').val( found['subject'] );
+			$('#message').val( found['message'] );
+			$('#sendMail').attr('href', found['data'] );
+			$('.result').show(300);
+		}else{
+			console.log('not found!')
+		}
+	});
+	
+	// Just for debug -- maybe needed later
+	$('#sendMail').click(function(){
+		console.log($(this).val());
+	});
+	
+	</script>
+
+</body>
+</html>
