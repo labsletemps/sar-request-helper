@@ -66,7 +66,7 @@
 	
 	// Get Companies & properties json
 	$.ajax({
-			url: 'data/exports.json?2',
+			url: 'data/companies.json',
 			success: function(data){
 				$.each(data['data'], function(i, item){
 					companies.push(item);
