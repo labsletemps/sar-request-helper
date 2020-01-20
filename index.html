@@ -51,6 +51,7 @@
 	<link rel="canonical" href="https://labs.letemps.ch/interactive/2019/barometre-parite/"/>
 
 	<link rel="stylesheet" href="css/jquery-ui.min.css" />
+	<link rel="stylesheet" href="css/jquery-ui.structure.min" />
 
 	<!-- CSS -->
 	<style>
@@ -117,6 +118,18 @@
 	.result, #missingTexts{
 		display: none;
 	}
+	.ui-widget.ui-autocomplete{
+		border-radius: 3px;
+		margin-top: 2px;
+		border: 1px solid #ccc;
+	}
+	.ui-menu-item{
+		background: #fff;
+		/* border: 1px solid #ccc; */
+	}
+	.ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+    font-weight: bold !important;
+	}
 	</style>
 
 	<link href='https://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
@@ -164,7 +177,14 @@
 						<input type="text" id="name" class="form-control" />
 					</div>
 
-					<div class="result">
+					<div class="result" id="result">
+
+						<hr />
+
+						<div class="form-group">
+							<label for="object">Destinataire:</label>
+							<input type="text" class="form-control">
+						</div>
 
 						<div class="form-group">
 							<label for="object">Objet:</label>
