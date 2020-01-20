@@ -19,66 +19,49 @@ $.ajax({
 // recherche avec autocompletion / search with autocomplete
 $( "#companyInput" ).autocomplete({
 	source: function( request, response ) {
+		var slug = request.term.toLowerCase();
 		var query = `SELECT ?item ?itemLabel ?email
-            				WHERE
-            				{
-            				    ?item pdiot:P3 pdio:Q991 ; rdfs:label ?itemLabel.
-            				    FILTER(STRSTARTS(?itemLabel, "${request.term}")).
-            				    OPTIONAL{?item pdiot:P17 ?email .}
-            				    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],fr". }
-            				}`;
+		WHERE
+		{
+			?item pdiot:P3 pdio:Q991 ; rdfs:label ?itemLabel.
+			FILTER (CONTAINS(LCASE(?itemLabel), "${slug}")).
+			OPTIONAL{?item pdiot:P17 ?email .}
+			SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],fr". }
+		}`;
 
-	$.ajax({
-		type: 'GET',
-		url: 'https://query.personaldata.io/proxy/wdqs/bigdata/namespace/wdq/?origin=*&query=' + encodeURIComponent(query),
-		headers: {
-			Accept: 'application/sparql-results+json'
-		},
-		success: function( data ) {
-			console.log(data);
-			var items = [];
-			for (i in data['results']['bindings']){
-				var parts = data['results']['bindings'][i].item.value.split('/');
-				var q = parts[parts.length-1];
-				items.push({
-					'id': q,
-					'value': data['results']['bindings'][i].itemLabel.value,
-					'label': data['results']['bindings'][i].itemLabel.value,
-				});
+		$.ajax({
+			type: 'GET',
+			url: 'https://query.personaldata.io/proxy/wdqs/bigdata/namespace/wdq/?origin=*&query=' + encodeURIComponent(query),
+			headers: {
+				Accept: 'application/sparql-results+json'
+			},
+			success: function( data ) {
+				var items = [];
+				var q_list = [];
+				for (i in data['results']['bindings']){
+					var parts = data['results']['bindings'][i].item.value.split('/');
+					var q = parts[parts.length-1];
+
+					if( q_list.indexOf(q) < 0 ){ // remove duplicates
+						items.push({
+							'id': q,
+							'value': data['results']['bindings'][i].itemLabel.value,
+							'label': data['results']['bindings'][i].itemLabel.value,
+						});
+						q_list.push(q);
+					}
+				}
+				response( items );
+
 			}
-			console.log(items)
-			response( items );
-
-		}
-	});
-
-		// wbsearchentities alternative -- not filtered for data xx
-		// var params = "?action=wbsearchentities&search=" + request.term + "&language=fr&format=json&origin=*";
-		//
-		// $.ajax( {
-		// 	url: endpoint + params,
-		// 	success: function( data ) {
-		// 		console.log(data);
-		// 		var items = [];
-		// 		for (i in data['search']){
-		//
-		// 			items.push({
-		// 				'id': data['search'][i].id,
-		// 				'value': data['search'][i].i,
-		// 				'label': data['search'][i].label
-		// 			});
-		// 		}
-		// 		response( items );
-		// 	}
-		// } );
+		});
 	},
 	minLength: 2
 } );
 
+// Recherche des donnees sur wiki.personaldata.io
 $( "#companyInput" ).bind( "autocompleteselect", function(event, ui) {
-  console.log(ui)
 	var q = ui.item.id;
-	console.log(q);
 	$.ajax({
 		data: {
 			action: 'expandtemplates',
@@ -90,48 +73,41 @@ $( "#companyInput" ).bind( "autocompleteselect", function(event, ui) {
 		dataType: "json",
 		url: endpoint,
 		success: function (data) {
-			console.log()
-				var parameters = new URLSearchParams(data['expandtemplates']['wikitext']);
-				var subject = parameters.get('subject');
-				var body = parameters.get('body');
-				var emailMatch = data['expandtemplates']['wikitext'].match(/mailto:(.*?)\?/);
-				var email = emailMatch ? emailMatch[1] : '';
+			var parameters = new URLSearchParams(data['expandtemplates']['wikitext']);
+			var body = parameters.get('body');
+			// var subject = parameters.get('subject');
+			var subject = body.split('\n')[0];
+			var body = $.trim( body.substr( body.indexOf('\n') ) );
 
-				console.log(data['expandtemplates']['wikitext'])
-				console.log(data['expandtemplates'])
+			var emailMatch = data['expandtemplates']['wikitext'].match(/mailto:(.*?)\?/);
+			var email = emailMatch ? emailMatch[1] : '';
 
-				var item = {
-					'recipient-email': email,
-					key: q,
-					subject: subject,
-					message: body
-				}
-
-				console.log(item);
-				createMessage(item);
+			var item = {
+				'recipient': email,
+				key: q,
+				subject: subject,
+				message: body
+			}
+			createMessage(item);
 		},
 		error: function (e){
-			// Write something in warning div
+			// TODO Write something in warning div
 			console.log(e);
 		}
 	});
 });
 
-// $('.ui-menu-item').click(function(){
-// 	console.log($(this))
-// })
-
-// Creer le message apres choix dans SELECT ou champ de texte
+// Creer le message apres soit choix rapide soit recherche
 function createMessage(item){
 	/*
 	propriétés de "item" / "item" properties:
 	- subject (= objet du mail)
-	- recipient-email
+	- recipient
 	- data (= e-mail destinataire)
 	- message (= corps e-mail)
 	*/
-	if( 'recipient-email' in item){
-		$('#recipient-email').val(  item['recipient-email'] );
+	if( 'recipient' in item){
+		$('#recipient').val(  item['recipient'] );
 	}
 	$('#object').val(  item['subject'] );
 	$('#sendMail').attr('href',  item['data'] );
@@ -140,7 +116,7 @@ function createMessage(item){
 	var message =  item['message'];
 	var name = $('#name').val();
 	if(name != ''){
-	  message = message.replace('<<PRENOM NOM>>', name);
+		message = message.replace('<<PRENOM NOM>>', name);
 	}
 	var missingPattern = /.*<<.*>>/g;
 	var missingTexts = message.match(missingPattern);
@@ -148,10 +124,10 @@ function createMessage(item){
 	$('#missingTexts').hide();
 
 	if(missingTexts && missingTexts.length > 0){
-	  $.each( missingTexts, function( index, missingText ){
-	    $('#missingTexts').append('<li>' + missingText.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</li>');
-	  });
-	  $('#missingTexts').show();
+		$.each( missingTexts, function( index, missingText ){
+			$('#missingTexts').append('<li>' + missingText.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</li>');
+		});
+		$('#missingTexts').show();
 	}
 
 	$('#message').val( message );
@@ -175,8 +151,12 @@ $('#companySelect').change(function(){
 	}else{
 		console.log('not found!')
 	}
-
 })
+
+$('#name').change(function(){
+	// TODO
+});
+
 $('#sendMail').click(function(){
 	// TODO: updater le contenu du message avec objet + textarea
 	console.log($(this).val());
