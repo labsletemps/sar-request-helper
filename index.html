@@ -6,7 +6,7 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Opération Données</title>
-	<meta name="description" content="Égalité: «Le Temps» se livre à un exercice d’autocritique" />
+	<meta name="description" content="Générateur de demandes de données personnelles" />
 	<meta name="author" content="Florian Delafoi, Eléonore Sulser, Paul Ronga">
 	<link rel="shortcut icon" href="https://assets.letemps.ch/sites/default/files/favicon.ico" type="image/vnd.microsoft.icon" />
 
@@ -32,23 +32,23 @@
 	<meta name="msapplication-square310x310logo" content="https://assets.letemps.ch/themes/custom/letemps/favicons/mstile-310x310.png" />
 
 	<!-- FACEBOOK -->
-	<link rel="image_src" href="https://labs.letemps.ch/interactive/2019/barometre-parite/social3.jpg" />
-	<meta property="og:title" content="Parité: le baromètre du «Temps»" />
+	<link rel="image_src" href="https://labs.letemps.ch/interactive/2020/demander-ses-donnees/social3.jpg" />
+	<meta property="og:title" content="Demander ses données" />
 	<meta property="og:site_name" content="LeTemps.ch" />
-	<meta property="og:image" content="https://labs.letemps.ch/interactive/2019/barometre-parite/social3.jpg" />
+	<meta property="og:image" content="https://labs.letemps.ch/interactive/2020/demander-ses-donnees/social3.jpg" />
 	<meta property="og:type" content="article" />
-	<meta property="og:url" content="https://labs.letemps.ch/interactive/2019/barometre-parite/" />
-	<meta property="og:description" content="Égalité: «Le Temps» se livre à un exercice d’autocritique" />
+	<meta property="og:url" content="https://labs.letemps.ch/interactive/2020/demander-ses-donnees/" />
+	<meta property="og:description" content="Générateur de demandes de données personnelles" />
 
 	<!-- TWITTER -->
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:site" content="@letemps" />
-	<meta name="twitter:description" content="Égalité: «Le Temps» se livre à un exercice d’autocritique" />
-	<meta name="twitter:image" content="https://labs.letemps.ch/interactive/2019/barometre-parite/social3.jpg" />
-	<meta name="twitter:url" content="https://labs.letemps.ch/interactive/2019/barometre-parite/" />
+	<meta name="twitter:description" content="Générateur de demandes de données personnelles" />
+	<meta name="twitter:image" content="https://labs.letemps.ch/interactive/2020/demander-ses-donnees/social3.jpg" />
+	<meta name="twitter:url" content="https://labs.letemps.ch/interactive/2020/demander-ses-donnees/" />
 
 	<!-- CANONICAL URL -->
-	<link rel="canonical" href="https://labs.letemps.ch/interactive/2019/barometre-parite/"/>
+	<link rel="canonical" href="https://labs.letemps.ch/interactive/2020/demander-ses-donnees/"/>
 
 	<link rel="stylesheet" href="css/jquery-ui.min.css" />
 	<link rel="stylesheet" href="css/jquery-ui.structure.min" />
@@ -56,7 +56,7 @@
 	<!-- CSS -->
 	<style>
 	/* RESET BROWSER HTML5 */
-	html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video{border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent;margin:0;padding:0}body{line-height:1}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}nav ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}a{font-size:100%;vertical-align:baseline;background:transparent;margin:0;padding:0}ins{background-color:#ff9;color:#000;text-decoration:none}mark{background-color:#ff9;color:#000;font-style:italic;font-weight:700}del{text-decoration:line-through}abbr[title],dfn[title]{border-bottom:1px dotted;cursor:help}table{border-collapse:collapse;border-spacing:0}hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0}input,select{vertical-align:middle}ul{list-style-type:none;}
+	html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video{border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent;margin:0;padding:0}body{line-height:1}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}nav ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}a{font-size:100%;vertical-align:baseline;background:transparent;margin:0;padding:0}ins{background-color:#ff9;color:#000;text-decoration:none}mark{background-color:#ff9;color:#000;font-style:italic;font-weight:700}del{text-decoration:line-through}abbr[title],dfn[title]{border-bottom:1px dotted;cursor:help}table{border-collapse:collapse;border-spacing:0}input,select{vertical-align:middle}ul{list-style-type:none;}
 
 	/* BAR */
 	div.brand-nav { width: 100%; background: rgba(0, 0, 0, 0.15); position: fixed; height: 57px; z-index: 1000; top:0;}
@@ -115,7 +115,12 @@
 		div.brand-nav div.brand-social-wrapper span.brand-button i { font-size: 15px; margin-top: 13px; }
 		div.brand-nav div.brand-social-wrapper span.brand-button:hover i { font-size: 22px; margin-top: 10px; }
 	}
-	.result, #missingTexts{
+	hr.separator{
+		height: 6px;
+		border: 0;
+		box-shadow: inset 0 6px 6px -6px rgba(0, 0, 0, 0.4);
+	}
+	#suggest, .result, #missingTexts, .name{
 		display: none;
 	}
 	.ui-widget.ui-autocomplete{
@@ -128,7 +133,7 @@
 		/* border: 1px solid #ccc; */
 	}
 	.ui-menu-item .ui-menu-item-wrapper.ui-state-active {
-    font-weight: bold !important;
+		font-weight: bold !important;
 	}
 	</style>
 
@@ -155,35 +160,45 @@
 				<h1 class="intro">Demander ses données</h1>
 				<p class="lead">Générateur de demandes de données personnelles</p>
 				<!-- <p><b>À ce sujet:</b> <a href="https://">article qui présente l'opération</a></p> -->
-				<p><b>Disclaimer</b> Ce formulaire sert génère des e-mail de demandes d’accès aux données personnelles.
-					Il s’appuie sur <a href="https://wiki.personaldata.io/wiki/Main_Page">wiki.personaldata.io</a>, un site contributif visant à aider les utilisateurs dans leurs requêtes auprès des entreprises.
+				<p>Cet outil s’appuie sur <a href="https://wiki.personaldata.io/wiki/Main_Page">wiki.personaldata.io</a>, un site contributif visant à aider les utilisateurs dans leurs requêtes auprès des entreprises.
 					<i>Le Temps</i> n’aura en aucun cas l’accès aux réponses des entreprises, à moins que vous ne nous les transmettiez explicitement après les avoir reçues.</p>
 
 
+
+
 					<div class="form-group">
-						<label for="companySelect">Choix rapide:</label>
+						<label for="companyInput">Rechercher une entreprise:</label>
+						<input type="text" id="companyInput" class="form-control" />
+						<!-- <button class="btn">Copier</button> -->
+					</div>
+
+					<div>
+						<p><a href="#" id="suggestButton">Afficher des suggestions</a> – <a href="mailto:data@letemps.ch?subject=Ajouter%20une%20entreprise" id="requestAddButton">Demander l’ajout d’une entreprise</a></p>
+					</div>
+
+					<div class="form-group" id="suggest">
+						<label for="companySelect">Choix rapide</label>
 						<select id="companySelect" class="form-control">
 							<option>Choisir…</option>
 						</select>
 					</div>
 
-					<div class="form-group">
-						<label for="companyInput">Ou recherchez une entreprise:</label>
-						<input type="text" id="companyInput" class="form-control" />
-					</div>
+				</div>
+			</div>
 
-					<div class="form-group">
+			<div class="row">
+				<div class="offset-md-2 col-md-8 col-sm-12 result" id="result">
+					<hr class="separator" />
+
+					<div class="form-group name">
 						<label for="name">Nom à insérer dans l’e-mail (optionnel):</label>
-						<input type="text" id="name" class="form-control" />
-					</div>
-
-					<div class="result" id="result">
-
-						<hr />
+						<input type="text" id="name" class="form-control" placeholder="<<PRENOM NOM>>" />
+						</div>
 
 						<div class="form-group">
 							<label for="object">Destinataire:</label>
-							<input type="text" class="form-control">
+							<input type="text" class="form-control" id="recipient">
+
 						</div>
 
 						<div class="form-group">
