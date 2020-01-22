@@ -1,6 +1,10 @@
 var items = [];
 var endpoint = "https://wiki.personaldata.io/w/api.php";
 
+$('#suggestButton').click(function(){
+	$('#suggest').show();
+})
+
 // ajout des select options a partir du JSON / create select options from JSON
 $.ajax({
 	url: 'data/companies.json',
@@ -20,14 +24,20 @@ $.ajax({
 $( "#companyInput" ).autocomplete({
 	source: function( request, response ) {
 		var slug = request.term.toLowerCase();
-		var query = `SELECT ?item ?itemLabel ?email
-		WHERE
-		{
-			?item pdiot:P3 pdio:Q991 ; rdfs:label ?itemLabel.
-			FILTER (CONTAINS(LCASE(?itemLabel), "${slug}")).
-			OPTIONAL{?item pdiot:P17 ?email .}
-			SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],fr". }
-		}`;
+
+		// Q991 (swiss data controller) ou Q96 (data controller)
+
+		var query = `SELECT ?item ?itemLabel ?email ?country
+			WHERE
+			{
+				{?item pdiot:P3 pdio:Q96; rdfs:label ?itemLabel.}
+				UNION
+				{?item pdiot:P3 pdio:Q991; rdfs:label ?itemLabel.}
+			  FILTER (CONTAINS(LCASE(?itemLabel), "${slug}")).
+			  OPTIONAL{?item pdiot:P55 ?country}
+			  OPTIONAL{?item pdiot:P17 ?email .}
+			  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],fr". }
+			}`;
 
 		$.ajax({
 			type: 'GET',
@@ -39,14 +49,19 @@ $( "#companyInput" ).autocomplete({
 				var items = [];
 				var q_list = [];
 				for (i in data['results']['bindings']){
+
 					var parts = data['results']['bindings'][i].item.value.split('/');
+
 					var q = parts[parts.length-1];
+
+					var country = data['results']['bindings'][i].country ? data['results']['bindings'][i].country.value : 'null';
 
 					if( q_list.indexOf(q) < 0 ){ // remove duplicates
 						items.push({
 							'id': q,
 							'value': data['results']['bindings'][i].itemLabel.value,
 							'label': data['results']['bindings'][i].itemLabel.value,
+							'country': country
 						});
 						q_list.push(q);
 					}
@@ -62,10 +77,19 @@ $( "#companyInput" ).autocomplete({
 // Recherche des donnees sur wiki.personaldata.io
 $( "#companyInput" ).bind( "autocompleteselect", function(event, ui) {
 	var q = ui.item.id;
+
+	// GPDR or Swiss SAR?
+	var swissSAR = false;
+	var templateName = 'MailtoAccess';
+	if(ui.item.country == 'https://wiki.personaldata.io/entity/Q416'){ // Q416 = Switzerland
+		swissSAR = true;
+		templateName = 'MailtoSwissAccess';
+	}
+
 	$.ajax({
 		data: {
 			action: 'expandtemplates',
-			text: '{{MailtoSwissAccess|' + q + '}}',
+			text: '{{' + templateName + '|' + q + '}}',
 			format: 'json',
 			prop: 'wikitext',
 			origin: '*'
@@ -75,9 +99,12 @@ $( "#companyInput" ).bind( "autocompleteselect", function(event, ui) {
 		success: function (data) {
 			var parameters = new URLSearchParams(data['expandtemplates']['wikitext']);
 			var body = parameters.get('body');
+			var subject = 'Subject Access Request';
 			// var subject = parameters.get('subject');
-			var subject = body.split('\n')[0];
-			var body = $.trim( body.substr( body.indexOf('\n') ) );
+			if(swissSAR){
+				subject = body.split('\n')[0];
+				body = $.trim( body.substr( body.indexOf('\n') ) );
+			}
 
 			var emailMatch = data['expandtemplates']['wikitext'].match(/mailto:(.*?)\?/);
 			var email = emailMatch ? emailMatch[1] : '';
