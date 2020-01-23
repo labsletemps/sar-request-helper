@@ -117,7 +117,7 @@ $( "#companyInput" ).bind( "autocompleteselect", function(event, ui) {
 			var parameters = new URLSearchParams(data['expandtemplates']['wikitext']);
 			var body = parameters.get('body');
 			var subject = 'Subject Access Request';
-			// var subject = parameters.get('subject');
+
 			if(swissSAR){
 				subject = body.split('\n')[0];
 				body = $.trim( body.substr( body.indexOf('\n') ) );
@@ -206,3 +206,17 @@ $('#sendMail').click(function(){
 	// TODO: updater le contenu du message avec objet + textarea
 	console.log($(this).val());
 });
+
+$('.copyValue').click(function(){
+
+	var targetField = $('#' + $(this).data('target'));
+  targetField.focus();
+  targetField.select();
+
+  try {
+    var successful = document.execCommand('copy');
+    console.log('Copying result ' + successful);
+  } catch (err) {
+    console.log('Error while copying');
+  }
+})
