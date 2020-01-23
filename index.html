@@ -55,91 +55,12 @@
 
 	<!-- CSS -->
 	<style>
-	/* RESET BROWSER HTML5 */
-	html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video{border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent;margin:0;padding:0}body{line-height:1}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}nav ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}a{font-size:100%;vertical-align:baseline;background:transparent;margin:0;padding:0}ins{background-color:#ff9;color:#000;text-decoration:none}mark{background-color:#ff9;color:#000;font-style:italic;font-weight:700}del{text-decoration:line-through}abbr[title],dfn[title]{border-bottom:1px dotted;cursor:help}table{border-collapse:collapse;border-spacing:0}input,select{vertical-align:middle}ul{list-style-type:none;}
 
-	/* BAR */
-	div.brand-nav { width: 100%; background: rgba(0, 0, 0, 0.15); position: fixed; height: 57px; z-index: 1000; top:0;}
-	/* div.brand-nav { width: 100%; background: linear-gradient(to bottom, rgba(0,0,0,.7) 0, rgba(0,0,0,.5) 50%, rgba(0,0,0,.0) 200%); position: fixed; height: 57px; z-index: 1000;} */
-	div.brand-nav.normal { width: 100%; background: #ffffff; /*background: linear-gradient(to right, #fff 50%,  #d8d6d6 100%);*/ border-bottom: 1px solid #eaeaea;}
-
-	/* NAVBAR HIDE EFFECT CLASSES (HEADROOM.JS) */
-	div.headroom { transition: transform 200ms linear; }
-	div.headroom--pinned { transform: translateY(0%); -webkit-transition: all 0.2s ease-in; -moz-transition: all 0.2s ease-in; transition: all 0.2s ease-in; opacity: 1;}
-	div.headroom--unpinned { transform: translateY(-100%); -webkit-transition: all 0.2s ease-in; -moz-transition: all 0.2s ease-in; transition: all 0.2s ease-in; opacity: 0;}
-
-	/* IF NAVBAR HAS "LOCKED" CLASS, IT DOESNT HIDE ANYMORE (set in variable.json) */
-	div.brand-nav.headroom.is-locked { transform: translateY(0%) !important; opacity: 1 !important; }
-	div.brand-nav.headroom.is-locked div.brand-logo-wrapper { transform: translateX(0%) !important; }
-	div.brand-nav.headroom.is-locked div.brand-social-wrapper { transform: translateX(0%) !important; }
-
-	/* BRAND LOGO WRAPPER + SLIDE LEFT EFFECT CLASSES */
-	div.brand-nav div.brand-logo-wrapper { height: 100%; float: left; }
-	div.brand-nav div.brand-logo-wrapper.is-slided { transform: translateX(-20%); -webkit-transition: all 0.2s cubic-bezier(.6,-1.09,.36,1.72); -moz-transition: all 0.2s cubic-bezier(.6,-1.09,.36,1.72); transition: all 0.2s cubic-bezier(.6,-1.09,.36,1.72); }
-	div.brand-nav div.brand-logo-wrapper.isnot-slided { transform: translateX(0%); -webkit-transition: all 0.25s ease-in; -moz-transition: all 0.25s ease-in; transition: all 0.25s ease-in; }
-	div.brand-nav div.brand-logo-wrapper a { height: 100%; float: left; display: block; margin-left: 30px; text-decoration: none; border: none;}
-	div.brand-nav div.brand-logo-wrapper svg#brand-logo { height: 100%; height: auto; }
-	div.brand-nav.normal div.brand-logo-wrapper svg#brand-logo path { fill: #930025; }
-	div.brand-nav div.brand-logo-wrapper .partner-brand-logo { width: auto; height: 35px; margin-top: 12px; }
-
-	/* SOCIAL WRAPPER + SLIDE RIGHT EFFECT CLASSES */
-	div.brand-nav div.brand-social-wrapper { float: right; height: 100%; }
-	div.brand-nav div.brand-social-wrapper.is-slided { transform: translateX(20%); -webkit-transition: all 0.2s cubic-bezier(.6,-1.09,.36,1.72); -moz-transition: all 0.2s cubic-bezier(.6,-1.09,.36,1.72); transition: all 0.2s cubic-bezier(.6,-1.09,.36,1.72); }
-	div.brand-nav div.brand-social-wrapper.isnot-slided { transform: translateX(0%); -webkit-transition: all 0.25s ease-in; -moz-transition: all 0.25s ease-in; transition: all 0.25s ease-in; }
-
-	/* SOCIAL WRAPPER > BUTTONS */
-	div.brand-nav div.brand-social-wrapper span.brand-button { width: 60px; height: 100%; /*background: red;*/ float: right; color: white; text-align: center; cursor: pointer; -webkit-transition: all 0.1s ease-in; -moz-transition: all 0.1s ease-in; transition: all 0.1s ease-in; }
-	div.brand-nav div.brand-social-wrapper a { float: right; text-decoration: none; border: none; height: 100%; }
-	div.brand-nav div.brand-social-wrapper a:nth-child(1) { margin-right: 30px; }
-	div.brand-nav div.brand-social-wrapper span.brand-button:hover { background: rgba(255, 255, 255, .3); -webkit-transition: all 0.1s ease-in; -moz-transition: all 0.1s ease-in; transition: all 0.1s ease-in;}
-
-	/* SOCIAL WRAPPER > BUTTONS > ICONS */
-	div.brand-nav div.brand-social-wrapper span.brand-button i { font-size: 20px; margin-top: 18px; -webkit-transition: all 0.1s ease-in; -moz-transition: all 0.1s ease-in; transition: all 0.1s ease-in; }
-	div.brand-nav.normal div.brand-social-wrapper span.brand-button i.fa-facebook { color: #323232; }
-	div.brand-nav.normal div.brand-social-wrapper span.brand-button:hover i.fa-facebook { color: #3d5a98; }
-	div.brand-nav.normal div.brand-social-wrapper span.brand-button i.fa-twitter { color: #323232; }
-	div.brand-nav.normal div.brand-social-wrapper span.brand-button:hover i.fa-twitter { color: #00aced; }
-	div.brand-nav.normal div.brand-social-wrapper span.brand-button i.fa-linkedin { color: #323232; }
-	div.brand-nav.normal div.brand-social-wrapper span.brand-button:hover i.fa-linkedin { color: #1c87bd; }
-	div.brand-nav div.brand-social-wrapper span.brand-button:hover i { font-size: 30px; margin-top: 13px; -webkit-transition: all 0.1s ease-in; -moz-transition: all 0.1s ease-in; transition: all 0.1s ease-in;}
-	/*div.brand-nav div.brand-social-wrapper span.brand-button i.fa-share-alt { clear: both !important; }*/
-
-	/* MEDIAQUERIES */
-	@media screen and (max-width: 580px) {
-		div.brand-nav { height: 40px !important; }
-		div.brand-nav div.brand-social-wrapper a:nth-child(1) { margin-right: 0; }
-		div.brand-nav div.brand-logo-wrapper a { margin-left: 0; }
-		div.brand-nav div.brand-logo-wrapper svg#brand-logo { height: 100% !important; height: auto; }
-		div.brand-nav div.brand-logo-wrapper .partner-brand-logo { height: 24px; margin-top: 10px;}
-		div.brand-nav div.brand-social-wrapper span.brand-button { width: 40px; }
-		div.brand-nav div.brand-social-wrapper span.brand-button i { font-size: 15px; margin-top: 13px; }
-		div.brand-nav div.brand-social-wrapper span.brand-button:hover i { font-size: 22px; margin-top: 10px; }
-	}
-	hr.separator{
-		height: 6px;
-		border: 0;
-		box-shadow: inset 0 6px 6px -6px rgba(0, 0, 0, 0.4);
-	}
-	#suggest, .result, #missingTexts, .name{
-		display: none;
-	}
-	.ui-widget.ui-autocomplete{
-		border-radius: 3px;
-		margin-top: 2px;
-		border: 1px solid #ccc;
-	}
-	.ui-menu-item{
-		background: #fff;
-		/* border: 1px solid #ccc; */
-	}
-	.ui-menu-item .ui-menu-item-wrapper.ui-state-active {
-		font-weight: bold !important;
-	}
 	</style>
 
 	<link href='https://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,800" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"/>
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 
@@ -158,7 +79,7 @@
 		<div class="row">
 			<div class="offset-md-2 col-md-8 col-sm-12">
 				<h1 class="intro">Demander ses données</h1>
-				<p class="lead">Générateur de demandes de données personnelles</p>
+				<p class="lead">Générateur de demandes de données personnelles (expérimental)</p>
 				<!-- <p><b>À ce sujet:</b> <a href="https://">article qui présente l'opération</a></p> -->
 				<p>Cet outil s’appuie sur <a href="https://wiki.personaldata.io/wiki/Main_Page">wiki.personaldata.io</a>, un site contributif visant à aider les utilisateurs dans leurs requêtes auprès des entreprises.
 					<i>Le Temps</i> n’aura en aucun cas l’accès aux réponses des entreprises, à moins que vous ne nous les transmettiez explicitement après les avoir reçues.</p>
@@ -175,7 +96,7 @@
 					<div>
 						<p><a href="#" id="suggestButton">Afficher des suggestions</a> – <a href="mailto:data@letemps.ch?subject=Ajouter%20une%20entreprise" id="requestAddButton">Demander l’ajout d’une entreprise</a></p>
 					</div>
-
+					
 					<div class="form-group" id="suggest">
 						<label for="companySelect">Choix rapide</label>
 						<select id="companySelect" class="form-control">
@@ -190,10 +111,7 @@
 				<div class="offset-md-2 col-md-8 col-sm-12 result" id="result">
 					<hr class="separator" />
 
-					<div class="form-group name">
-						<label for="name">Nom à insérer dans l’e-mail (optionnel):</label>
-						<input type="text" id="name" class="form-control" placeholder="<<PRENOM NOM>>" />
-						</div>
+
 
 						<div class="form-group">
 							<label for="object">Destinataire:</label>
