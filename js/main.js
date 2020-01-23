@@ -1,6 +1,22 @@
 var items = [];
 var endpoint = "https://wiki.personaldata.io/w/api.php";
 
+class RequestTemplate {
+	constructor(id){
+		this.id = id;
+	}
+}
+
+// TODO
+// Q1185 = Le Temps
+/*var parameters = new URLSearchParams(window.location.search);
+var targetEntity = parameters.get('entity');
+if(targetEntity){
+	var country = parameters.get('country');
+
+}*/
+
+
 $('#suggestButton').click(function(){
 	$('#suggest').show();
 })
@@ -97,6 +113,7 @@ $( "#companyInput" ).bind( "autocompleteselect", function(event, ui) {
 		dataType: "json",
 		url: endpoint,
 		success: function (data) {
+
 			var parameters = new URLSearchParams(data['expandtemplates']['wikitext']);
 			var body = parameters.get('body');
 			var subject = 'Subject Access Request';
@@ -113,7 +130,8 @@ $( "#companyInput" ).bind( "autocompleteselect", function(event, ui) {
 				'recipient': email,
 				key: q,
 				subject: subject,
-				message: body
+				message: body,
+				data: data['expandtemplates']['wikitext']
 			}
 			createMessage(item);
 		},
