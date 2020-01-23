@@ -119,18 +119,10 @@ footer {
 	border-bottom:1px dotted #5C5959;
 }
 
-
 .footer-container a:hover {
 	color:#950728;
 	border-bottom:1px dotted #950728;
 	text-decoration:none;
-}
-
-
-h1 {
-	font-size: 34px;
-	margin-top: 30px;
-	margin-bottom: 30px;
 }
 
 h1.intro {
