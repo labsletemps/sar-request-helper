@@ -1,20 +1,32 @@
 var items = [];
 var endpoint = "https://wiki.personaldata.io/w/api.php";
 
-class RequestTemplate {
-	constructor(id){
-		this.id = id;
-	}
+function richTextCopy(element){
+  function listener(e) {
+    e.clipboardData.setData("text/html", str);
+    e.clipboardData.setData("text/plain", str);
+    e.preventDefault();
+  }
+  document.addEventListener("copy", listener);
+  document.execCommand("copy");
+  document.removeEventListener("copy", listener);
 }
 
 // TODO
 // Q1185 = Le Temps
-/*var parameters = new URLSearchParams(window.location.search);
-var targetEntity = parameters.get('entity');
-if(targetEntity){
-	var country = parameters.get('country');
-
-}*/
+// 'MailtoSwissAccess'
+// => ?entity=Q1185&template=MailtoSwissAccess
+// ou gdpr: ?entity=Q241&template=MailtoAccess
+var parameters = new URLSearchParams(window.location.search);
+var qid = parameters.get('entity');
+if(qid){
+  console.log('Parameters for direct template!')
+	var templateName = parameters.get('template');
+  if (! templateName){
+    templateName = 'MailtoAccess';
+  }
+  fetchTemplate(qid, templateName);
+}
 
 
 $('#suggestButton').click(function(){
@@ -90,22 +102,11 @@ $( "#companyInput" ).autocomplete({
 	minLength: 2
 } );
 
-// Recherche des donnees sur wiki.personaldata.io
-$( "#companyInput" ).bind( "autocompleteselect", function(event, ui) {
-	var q = ui.item.id;
-
-	// GPDR or Swiss SAR?
-	var swissSAR = false;
-	var templateName = 'MailtoAccess';
-	if(ui.item.country == 'https://wiki.personaldata.io/entity/Q416'){ // Q416 = Switzerland
-		swissSAR = true;
-		templateName = 'MailtoSwissAccess';
-	}
-
-	$.ajax({
+function fetchTemplate(qid, templateName){
+  $.ajax({
 		data: {
 			action: 'expandtemplates',
-			text: '{{' + templateName + '|' + q + '}}',
+			text: '{{' + templateName + '|' + qid + '}}',
 			format: 'json',
 			prop: 'wikitext',
 			origin: '*'
@@ -118,7 +119,7 @@ $( "#companyInput" ).bind( "autocompleteselect", function(event, ui) {
 			var body = parameters.get('body');
 			var subject = 'Subject Access Request';
 
-			if(swissSAR){
+			if(templateName == 'MailtoSwissAccess'){
 				subject = body.split('\n')[0];
 				body = $.trim( body.substr( body.indexOf('\n') ) );
 			}
@@ -128,7 +129,7 @@ $( "#companyInput" ).bind( "autocompleteselect", function(event, ui) {
 
 			var item = {
 				'recipient': email,
-				key: q,
+				key: qid,
 				subject: subject,
 				message: body,
 				data: data['expandtemplates']['wikitext']
@@ -140,6 +141,22 @@ $( "#companyInput" ).bind( "autocompleteselect", function(event, ui) {
 			console.log(e);
 		}
 	});
+}
+
+// Recherche des donnees sur wiki.personaldata.io
+$( "#companyInput" ).bind( "autocompleteselect", function(event, ui) {
+	var qid = ui.item.id;
+
+	// GPDR or Swiss SAR?
+	var swissSAR = false;
+	var templateName = 'MailtoAccess';
+	if(ui.item.country == 'https://wiki.personaldata.io/entity/Q416'){ // Q416 = Switzerland
+		swissSAR = true;
+		templateName = 'MailtoSwissAccess';
+	}
+  
+  fetchTemplate(qid, templateName);
+  
 });
 
 // Creer le message apres soit choix rapide soit recherche
@@ -176,7 +193,16 @@ function createMessage(item){
 	}
 
 	$('#message').val( message );
-
+  // $('#messagebody').text( message );
+  
+  
+  var converter = new showdown.Converter(),
+    text      = message.replace(/^\-*$/, 'XXXX'),
+    html      = converter.makeHtml(text);
+  
+  console.log(message.replace(/^(\s{0,2}\- )/g, '* '))
+  console.log(html);
+  $('#messagebody').html( html );
 	$('.result').show(300);
 }
 

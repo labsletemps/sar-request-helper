@@ -55,14 +55,21 @@
 
 	<!-- CSS -->
 	<style>
-
+	/* TODO: remove textarea later */
+	textarea{
+		display: none !important;
+	}
+	#messagebody{
+		border: 1px solid #ced4da;
+    border-radius: .25rem;
+		padding: .375rem .75rem;
+	}
 	</style>
 
 	<link href='https://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,800" rel="stylesheet">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"/>
-	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<link rel="stylesheet" type="text/css" href="css/style.css?2" />
 
 </head>
 
@@ -143,7 +150,15 @@
 						</div>
 						<div class="form-group">
 							<label for="message">Message:</label>
+							<span class="input-group-btn" style="float: right;">
+								<button class="btn btn-dark copyValue" data-target="messagebody" type="button" id="copyRecipient"
+										data-toggle="tooltip" data-placement="button"
+										title="Copier dans le presse-papier">
+									Copier
+								</button>
+							</span>
 							<textarea class="form-control" rows="10" id="message"></textarea>
+							<div id="messagebody" contenteditable="true"></div>
 						</div>
 
 						<a class="btn btn-primary" href="mailto:" id="sendMail">Ouvrir dans le client e-mail</a>
@@ -154,6 +169,8 @@
 		</div>
 		<script src="lib/jquery.min.js"></script>
 		<script src="lib/jquery-ui.min.js"></script>
+		<!-- convert markdown to html -->
+		<script src="lib/showdown.min.js"></script>
 		<script src="js/main.js"></script>
 
 
