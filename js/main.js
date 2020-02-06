@@ -160,9 +160,9 @@ function createMessage(item){
 	// Remplacements a faire et a signaler dans le text de l’e-mail
 	var message =  item['message'];
 	var name = $('#name').val();
-	if(name != ''){
-		message = message.replace('<<PRENOM NOM>>', name);
-	}
+	// if(name != ''){
+	// 	message = message.replace('<<PRENOM NOM>>', name);
+	// }
 	var missingPattern = /.*<<.*>>/g;
 	var missingTexts = message.match(missingPattern);
 	$('#missingTexts').html('');
